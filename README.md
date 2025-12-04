@@ -12,16 +12,18 @@ This Python script decrypts an encrypted PDF file using an empty password and sa
 ## Requirements
 
 - Python 3.x
-- [PyPDF2](https://pypi.org/project/PyPDF2/)
+- [pypdf](https://pypi.org/project/pypdf/)
 
 Install the required package using pip:
 
 ```bash
-pip install PyPDF2
+pip install pypdf
 ```
 
 ## Usage
 ```
-python pdfdecrypt.py <input.pdf> <output.pdf>
+python pdfdecrypt.py <input.pdf> [output.pdf] [-f --force]
+If you don't specify output file, it will be saved in the format 'filename_decrypted.pdf'.
+If you want to overwrite the existing file, add the -f switch.
 ```
 

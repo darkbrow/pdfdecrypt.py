@@ -1,10 +1,27 @@
-#!env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import sys
-from PyPDF2 import PdfReader, PdfWriter
+import os
+from pypdf import PdfReader, PdfWriter
 
-def decrypt_pdf(input_path, output_path):
+
+def decrypt_pdf(input_path, output_path=None, force=False):
     try:
+        # Determine default output filename if not provided
+        if output_path is None:
+            base, ext = os.path.splitext(input_path)
+            if ext == "":
+                # no extension, just append
+                output_path = base + "_decrypted"
+            else:
+                output_path = base + "_decrypted" + ext
+
+        # Check if output file already exists
+        if os.path.exists(output_path) and not force:
+            print(f"Error: Output file '{output_path}' already exists.")
+            print("Use -f or --force flag to overwrite.")
+            return False
+
         # Open the encrypted PDF
         reader = PdfReader(input_path)
 
@@ -37,11 +54,21 @@ def decrypt_pdf(input_path, output_path):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
-        print("Usage: python decrypt_pdf.py <input.pdf> <output.pdf>")
+    # Accept: python pdfdecrypt.py <input.pdf> [output.pdf] [-f|--force]
+    if len(sys.argv) < 2:
+        print("Usage: python pdfdecrypt.py <input.pdf> [output.pdf] [-f|--force]")
         sys.exit(1)
 
-    input_pdf = sys.argv[1]
-    output_pdf = sys.argv[2]
+    args = sys.argv[1:]
+    force = any(a in ("-f", "--force") for a in args)
+    # Collect non-flag args as file paths
+    files = [a for a in args if a not in ("-f", "--force")]
 
-    decrypt_pdf(input_pdf, output_pdf)
+    if len(files) < 1 or len(files) > 2:
+        print("Usage: python pdfdecrypt.py <input.pdf> [output.pdf] [-f|--force]")
+        sys.exit(1)
+
+    input_pdf = files[0]
+    output_pdf = files[1] if len(files) == 2 else None
+
+    decrypt_pdf(input_pdf, output_pdf, force=force)
