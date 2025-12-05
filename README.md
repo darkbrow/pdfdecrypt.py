@@ -23,7 +23,7 @@ pip install pypdf
 ## Usage
 ```
 python pdfdecrypt.py <input.pdf> [output.pdf] [-f --force]
-If you don't specify output file, it will be saved in the format 'filename_decrypted.pdf'.
-If you want to overwrite the existing file, add the -f switch.
 ```
+- If you don't specify output file, it will be saved in the format 'filename_decrypted.pdf'.
+- If you want to overwrite the existing file, add the -f switch.
 
